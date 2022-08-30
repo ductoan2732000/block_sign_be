@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-
+import { testSmartContract } from '../smart-contract/test';
 @Injectable()
 export class SignService {
   getSign(): string {
     return 'fdfdfdlf';
   }
-  postSign(value: any): string {
-    return JSON.stringify(value);
-  }
+  postSign = async (value: any) => {
+    const test = await testSmartContract();
+    console.log(test);
+    return test;
+  };
 }

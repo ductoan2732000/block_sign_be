@@ -1,7 +1,7 @@
 {
   "name": "block_sign_be",
   "version": "0.0.1",
-  "description": "",
+  "description": "<p align=\"center\">   <a href=\"http://nestjs.com/\" target=\"blank\"><img src=\"https://nestjs.com/img/logo-small.svg\" width=\"200\" alt=\"Nest Logo\" /></a> </p>",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -27,10 +27,13 @@
     "@nestjs/swagger": "^6.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "fs": "^0.0.1-security",
     "nestjs-form-data": "^1.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "solc": "^0.8.16",
+    "web3": "^1.7.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -71,5 +74,18 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ductoan2732000/block_sign_be.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ductoan2732000/block_sign_be/issues"
+  },
+  "homepage": "https://github.com/ductoan2732000/block_sign_be#readme"
 }
