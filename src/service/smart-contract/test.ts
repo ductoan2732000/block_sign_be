@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 // Creation of Web3 class
 const Web3 = require('web3');
 
-export const testSmartContract = () => {
+export const testSmartContract = (): any => {
   const web3 = new Web3(
     new Web3.providers.HttpProvider('http://127.0.0.1:7545'),
   );
@@ -67,9 +67,6 @@ export const testSmartContract = () => {
       });
   });
   return {
-    web3: web3,
-    file: file,
-    ABI: ABI,
     bytecode: bytecode,
     contract: contract,
   };

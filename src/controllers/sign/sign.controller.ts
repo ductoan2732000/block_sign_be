@@ -1,3 +1,4 @@
+import { FileSign } from '~/model/dto/sign.dto';
 import {
   Body,
   Controller,
@@ -5,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -25,7 +27,7 @@ export class SignController {
   @Post()
   @ApiBody({ description: 'body:any someMethod' })
   @FormDataRequest()
-  async sign(@Body() signs) {
+  async sign(@Body() signs: FileSign) {
     const res = await this.signService.postSign(signs);
     return res;
   }

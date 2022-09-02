@@ -1,4 +1,5 @@
-import { IsNotEmpty } from "class-validator";
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 
 export class UserSign {
   @IsNotEmpty()
@@ -14,12 +15,14 @@ export class UserSign {
   y: number;
 
   @IsNotEmpty()
-  signature: File;
+  signature: Express.Multer.File;
 
   @IsNotEmpty()
   numberPage: number;
 }
 export class FileSign {
+  @ValidateNested({ each: true })
+  @Type(() => UserSign)
   @IsNotEmpty()
   signs: UserSign[];
 }

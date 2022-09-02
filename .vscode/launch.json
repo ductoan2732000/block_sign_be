@@ -5,6 +5,8 @@
       "type": "node",
       "request": "launch",
       "name": "My application Name",
+      "sourceMaps": true,
+      "stopOnEntry": true,
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "args": ["${workspaceFolder}/src/main.ts"],
       "autoAttachChildProcesses": true

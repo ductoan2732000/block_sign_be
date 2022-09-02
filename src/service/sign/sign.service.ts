@@ -7,7 +7,6 @@ export class SignService {
   }
   postSign = async (value: any) => {
     const test = await testSmartContract();
-    console.log(test);
-    return test;
+    return value;
   };
 }
