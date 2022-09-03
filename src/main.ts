@@ -21,7 +21,6 @@ async function bootstrap() {
     } as ServiceAccount,
     databaseUrl: configService.get<string>('DATABASE_URL'),
   };
-  console.log(databaseConfig);
   // Initialize the firebase admin app
   admin.initializeApp({
     credential: admin.credential.cert(databaseConfig.adminConfig),
