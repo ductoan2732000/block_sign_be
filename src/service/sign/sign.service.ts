@@ -6,7 +6,7 @@ export class SignService {
     return 'fdfdfdlf';
   }
   postSign = async (value: any) => {
-    const test = await testSmartContract();
+    // const test = await testSmartContract();
     return value;
   };
 }
