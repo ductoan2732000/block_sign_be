@@ -7,12 +7,10 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 // Import firebase-admin
 import { ServiceAccount } from 'firebase-admin';
 import * as admin from 'firebase-admin';
-import { initializeApp } from 'firebase/app';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await createFirebaseAdmin(app);
-  await createFirebaseDatabase();
   const config = new DocumentBuilder()
     .setTitle('Swagger')
     .setDescription('Swagger for block sign app')
@@ -47,18 +45,4 @@ const createFirebaseAdmin = (app: INestApplication) => {
     credential: admin.credential.cert(databaseConfig.adminConfig),
     databaseURL: databaseConfig.databaseUrl,
   });
-};
-const createFirebaseDatabase = () => {
-  const firebaseConfig = {
-    apiKey: 'AIzaSyB-O6mBSFHUW4YuonzR-5bTs2PTKHLqlVc',
-    authDomain: 'block-sign-be.firebaseapp.com',
-    databaseURL:
-      'https://block-sign-be-default-rtdb.asia-southeast1.firebasedatabase.app',
-    projectId: 'block-sign-be',
-    storageBucket: 'block-sign-be.appspot.com',
-    messagingSenderId: '300592399740',
-    appId: '1:300592399740:web:68f659aabc72150a43d0f9',
-    measurementId: 'G-42SN3DNZQH',
-  };
-  const app = initializeApp(firebaseConfig);
 };
