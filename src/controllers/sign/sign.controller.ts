@@ -19,6 +19,8 @@ import { SignService } from '../../service/sign/sign.service';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set } from 'firebase/database';
+
+import * as path from 'path';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -39,7 +41,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
-const reference = ref(db, 'test/1');
+const reference = ref(db, 'test/2');
 @Controller(`${VERSION.V1}/${END_POINT.SIGN}`)
 export class SignController {
   constructor(private readonly signService: SignService) {}
@@ -53,6 +55,8 @@ export class SignController {
   @FormDataRequest()
   async sign(@Body() signs: FileSign) {
     const res = await this.signService.postSign(signs);
+    const aa = process.env.FIREBASE_MEASUREMENT_ID;
+    console.log(aa);
     set(reference, { name: 'be toan', age: 22 });
   }
 }
