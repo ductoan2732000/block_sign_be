@@ -1,3 +1,4 @@
+import { END_POINT_DATABASE } from '@/constants/endPoint';
 import { PATH_FILE_CONTRACT } from '@/constants/pathContract';
 import { getFileNameFromDirectoryPath } from '@/constants/utils';
 import {
@@ -25,7 +26,7 @@ export class SignService extends BaseService {
     const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
     const resCompile = compileContract(input, name.fullFileName, name.fileName);
     const res: any = await createContract(resCompile);
-    const reference = ref(this.db, 'test/2');
+    const reference = ref(this.db, END_POINT_DATABASE.TEST);
     set(reference, { name: res, age: 12 });
     return res;
   };
