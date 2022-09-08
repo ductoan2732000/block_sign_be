@@ -5,7 +5,7 @@ import {
   InputContract,
   ResponseCompile,
 } from '@/model/interface/contract.interface';
-import { DEFAULT_ACCOUNT, GAS, LANG_CONTRACT } from '..';
+import { DEFAULT_ACCOUNT, MAX_GAS, LANG_CONTRACT } from '..';
 
 export const createInput = (
   pathFile: string,
@@ -61,7 +61,7 @@ export const createContract = async (value: ResponseCompile) => {
   );
   const initialContract = await contract
     .deploy({ data: value.bytecode })
-    .send({ from: mainAccount, gas: GAS })
+    .send({ from: mainAccount, gas: MAX_GAS })
     .on('receipt', (receipt) => {
       console.log('Contract Address:', receipt.contractAddress);
     });

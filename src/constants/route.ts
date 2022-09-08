@@ -4,4 +4,5 @@ export const VERSION = {
 };
 export const END_POINT = {
   SIGN: 'sign',
+  DOCUMENT: 'document'
 };
