@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
   
-contract initial 
+contract sign 
 {
-    string public message = "Hello World";
+    string public message = "Sodility ~ new smart contract";
   
     function setMessage(string memory _newMessage) public 
     {

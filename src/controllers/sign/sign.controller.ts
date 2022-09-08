@@ -13,7 +13,7 @@ export class SignController extends BaseController {
   }
 
   @Get()
-  getSign(): string {
+  getSign(): any {
     return this.signService.getSign();
   }
 
@@ -22,5 +22,6 @@ export class SignController extends BaseController {
   @FormDataRequest()
   async sign(@Body() signs: FileSign) {
     const res = await this.signService.postSign(signs);
+    return res;
   }
 }
