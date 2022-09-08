@@ -2,15 +2,17 @@ import { FirebaseConfig } from '@/model/interface/base.interface';
 import { Injectable } from '@nestjs/common';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { Database, getDatabase } from 'firebase/database';
+import { FirebaseStorage, getStorage } from 'firebase/storage';
 @Injectable()
 export class BaseService {
   firebaseConfig: FirebaseConfig;
   app: FirebaseApp;
   db: Database;
+  store: FirebaseStorage;
   constructor() {
     this.initiateConnection();
   }
-  async initiateConnection() {
+  initiateConnection() {
     this.firebaseConfig = {
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -23,8 +25,9 @@ export class BaseService {
     };
     this.initiateDatabase();
   }
-  async initiateDatabase() {
-    this.app = await initializeApp(this.firebaseConfig);
-    this.db = await getDatabase();
+  initiateDatabase() {
+    this.app = initializeApp(this.firebaseConfig);
+    this.db = getDatabase();
+    this.store = getStorage();
   }
 }
