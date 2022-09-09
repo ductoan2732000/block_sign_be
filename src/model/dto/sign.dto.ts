@@ -18,7 +18,7 @@ export class UserSign {
   signature: Express.Multer.File;
 
   @IsNotEmpty()
-  numberPage: number;
+  number_page: number;
 }
 export class FileSign {
   @ValidateNested({ each: true })
