@@ -17,11 +17,11 @@ export class SignController extends BaseController {
     return this.signService.getSign();
   }
 
-  @Post(':uuid')
+  @Post(':sha256')
   @ApiBody({ description: 'body:any someMethod' })
   @FormDataRequest()
-  async sign(@Param('uuid') uuid: string, @Body() signs: FileSign) {
-    const res = await this.signService.postSign(uuid, signs);
+  async sign(@Param('sha256') sha256File: string, @Body() signs: FileSign) {
+    const res = await this.signService.postSign(sha256File, signs);
     return res;
   }
 }
