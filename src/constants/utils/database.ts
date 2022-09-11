@@ -15,3 +15,21 @@ export const postToDatabase = (
     Promise.all(listPromise);
   }
 };
+
+export const readFromDatabase = async (
+  db: database.Database,
+  pathRef: string,
+) => {
+  const dbRef = database.ref(db);
+  try {
+    const snapshot = await database.get(database.child(dbRef, pathRef));
+    if (snapshot.exists()) {
+      const res = snapshot.val();
+      return res;
+    } else {
+      return {};
+    }
+  } catch (error) {
+    return error;
+  }
+};
