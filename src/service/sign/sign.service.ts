@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { END_POINT_DATABASE, END_POINT_STORE } from '@/constants/endPoint';
 import { PATH_FILE_CONTRACT } from '@/constants/pathContract';
 import { BaseService } from '../base.service';
-import { getFileNameFromDirectoryPath } from '@/constants/utils';
+import {
+  attachFileSignToDocument,
+  getFileNameFromDirectoryPath,
+} from '@/constants/utils';
 import {
   compileContract,
   createContract,
@@ -11,25 +14,30 @@ import {
 import { FileSign } from '@/model/dto/sign.dto';
 import {
   getURLDownload,
+  uploadFileToStorage,
   uploadMultipleFileToStorage,
 } from '@/constants/utils/storage';
 import {
+  DocumentAfterSignUpload,
+  DocumentUpload,
   FileSignUpload,
+  ResponseSign,
 } from '@/model/interface/realtimeDatabase.interface';
-import { postToDatabase } from '@/constants/utils/database';
+import { postToDatabase, readFromDatabase } from '@/constants/utils/database';
 import { sha256 } from 'js-sha256';
 @Injectable()
 export class SignService extends BaseService {
   constructor() {
     super();
   }
-  getSign(): any {
-    const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
-    const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
-    const resCompile = compileContract(input, name.fullFileName, name.fileName);
-    const res = createContract(resCompile);
+  getSign = async (): Promise<any> => {
+    const pathDocument = END_POINT_DATABASE.ORIGINAL_FILE.replace(
+      '{{sha256}}',
+      '26a39b94e930fa238dc108dcfde09d96b029c25d84b3cf77701a73f3630d0375',
+    );
+    const res = await readFromDatabase(this.db, pathDocument);
     return res;
-  }
+  };
   postSign = async (sha256File: string, value: FileSign) => {
     /**
      * 1. upload all file sign to firebase store
@@ -53,7 +61,6 @@ export class SignService extends BaseService {
     );
     const listFullPath: string[] = resUpload.map((item) => item.full_path);
     const urls = await getURLDownload(this.store, listFullPath);
-
     const listFileUpload: FileSignUpload[] = resUpload.map((item, index) => {
       return {
         ...item,
@@ -65,11 +72,48 @@ export class SignService extends BaseService {
         number_page: value.signs[index].number_page,
       };
     });
+
+    // upload file signed to store
+    const pathDocument = END_POINT_DATABASE.ORIGINAL_FILE.replace(
+      '{{sha256}}',
+      sha256File,
+    );
+    const originalFile: DocumentUpload = await readFromDatabase(
+      this.db,
+      pathDocument,
+    );
+    const fileAfterSign = await attachFileSignToDocument(
+      originalFile.url,
+      value.signs,
+    );
+    const pathDocumentAfterSign = END_POINT_STORE.SIGN_DOCUMENT.replace(
+      '{{sha256}}',
+      sha256File,
+    );
+
+    const responseUploadSigned = await uploadFileToStorage(
+      fileAfterSign,
+      `[after sign] ${originalFile.name}`,
+      pathDocumentAfterSign,
+      this.store,
+    );
+    const responseDocumentPath: string = responseUploadSigned.full_path;
+    const urlResponseDocument = await getURLDownload(
+      this.store,
+      responseDocumentPath,
+    );
+    const documentUpload: DocumentAfterSignUpload = {
+      ...responseUploadSigned,
+      url: urlResponseDocument,
+      sha256_original_file: sha256File,
+    };
+
     // TODO
     // const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
     // const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
     // const resCompile = compileContract(input, name.fullFileName, name.fileName);
     // const res: any = await createContract(resCompile);
+    // save to database
     const listSha256 = listFile.map((item) => sha256(item.buffer));
     const pathToDatabase = listSha256.map((item) => {
       return END_POINT_DATABASE.SIGN_FILE.replace(
@@ -77,9 +121,16 @@ export class SignService extends BaseService {
         sha256File,
       ).replace('{{sha256_file}}', item);
     });
-
+    const pathResToDatabase = END_POINT_DATABASE.SIGNED_FILE.replace(
+      '{{sha256}}',
+      sha256(fileAfterSign),
+    );
     postToDatabase(pathToDatabase, this.db, listFileUpload);
-
-    return listFileUpload;
+    postToDatabase(pathResToDatabase, this.db, documentUpload);
+    const res: ResponseSign = {
+      signs: listFileUpload,
+      document: documentUpload,
+    };
+    return res;
   };
 }

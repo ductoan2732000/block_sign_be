@@ -13,8 +13,9 @@ export class SignController extends BaseController {
   }
 
   @Get()
-  getSign(): any {
-    return this.signService.getSign();
+  async getSign() {
+    const res = await this.signService.getSign();
+    return res;
   }
 
   @Post(':sha256')

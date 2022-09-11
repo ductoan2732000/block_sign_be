@@ -14,7 +14,8 @@ export class DocumentService extends BaseService {
   postDocument = async (value: PostDocument) => {
     // upload file into storage
     const responseUpload = await uploadFileToStorage(
-      value.document,
+      value.document.buffer,
+      (value.document as any).originalName,
       END_POINT_STORE.ORIGINAL_FILE,
       this.store,
     );

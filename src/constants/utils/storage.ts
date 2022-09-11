@@ -2,16 +2,16 @@ import { sha256 } from 'js-sha256';
 import * as store from 'firebase/storage';
 import { ResponseUpload } from '@/model/interface/storage.interface';
 export const uploadFileToStorage = async (
-  file: Express.Multer.File,
+  file: any,
+  nameFile: string,
   pathInStore: string,
   storeFirebase: store.FirebaseStorage,
 ): Promise<ResponseUpload | any> => {
-  const arrayBufferFile = file.buffer;
+  const arrayBufferFile = file;
   const sha256File = sha256(arrayBufferFile);
-  const fileName = (file as any).originalName;
   const path = pathInStore
     .replace('{{sha256}}', sha256File)
-    .replace('{{fileName}}', fileName);
+    .replace('{{fileName}}', nameFile);
   const storageRef = store.ref(storeFirebase, path);
   try {
     const snapshot: store.UploadResult = await store.uploadBytes(
