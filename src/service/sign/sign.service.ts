@@ -10,6 +10,7 @@ import {
   compileContract,
   createContract,
   createInput,
+  SmartContract,
 } from '@/constants/utils/contract';
 import { FileSign } from '@/model/dto/sign.dto';
 import {
@@ -31,12 +32,17 @@ export class SignService extends BaseService {
     super();
   }
   getSign = async (): Promise<any> => {
-    const pathDocument = END_POINT_DATABASE.ORIGINAL_FILE.replace(
-      '{{sha256}}',
-      '26a39b94e930fa238dc108dcfde09d96b029c25d84b3cf77701a73f3630d0375',
+    const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
+    const smartContract = new SmartContract(
+      PATH_FILE_CONTRACT.SIGN,
+      name.fullFileName,
+      name.fileName,
     );
-    const res = await readFromDatabase(this.db, pathDocument);
-    return res;
+    await smartContract.createInput();
+    await smartContract.compileContract();
+    await smartContract.createContract();
+    await smartContract.setHash('tranductoan', 'tranduchugn');
+    return smartContract.contractAddress;
   };
   postSign = async (sha256File: string, value: FileSign) => {
     /**
@@ -109,10 +115,14 @@ export class SignService extends BaseService {
     };
 
     // TODO
-    // const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
-    // const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
-    // const resCompile = compileContract(input, name.fullFileName, name.fileName);
-    // const res: any = await createContract(resCompile);
+    const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
+    const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
+    const resCompile = compileContract(input, name.fullFileName, name.fileName);
+    const smartContractAddress: string = await createContract(
+      resCompile,
+      sha256(fileAfterSign),
+      sha256File,
+    );
     // save to database
     const listSha256 = listFile.map((item) => sha256(item.buffer));
     const pathToDatabase = listSha256.map((item) => {
@@ -131,6 +141,7 @@ export class SignService extends BaseService {
       signs: listFileUpload,
       document: documentUpload,
     };
-    return res;
+
+    return smartContractAddress;
   };
 }

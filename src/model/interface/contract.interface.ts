@@ -5,6 +5,17 @@ export interface InputContract {
     outputSelection: any;
   };
 }
+export enum StateTransaction {
+  VIEW = 'view',
+  NONPAYABLE = 'nonpayable',
+}
+export interface ABI {
+  inputs: any[];
+  name: string;
+  outputs: any[];
+  stateMutability: StateTransaction;
+  type: string;
+}
 export interface ResponseCompile {
   ABI: any;
   bytecode: string;
