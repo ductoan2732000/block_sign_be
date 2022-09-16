@@ -48,29 +48,47 @@ export const compileContract = (
     bytecode: bytecode,
   } as ResponseCompile;
 };
-export const createContract = async (value: ResponseCompile) => {
-  let res: any = 'err';
+export const createContract = async (
+  value: ResponseCompile,
+  _signedDocument: string,
+  _originalDocument: string,
+) => {
+  let contractAddress: string = '';
+  let res: any = null;
   const rpcConectUrl = process.env.RPC_CONNECT_URL;
-  const web3 = new Web3(new Web3.providers.HttpProvider(`${rpcConectUrl}`));
+  const web3 = new Web3(new Web3.providers.HttpProvider(rpcConectUrl));
   const contract = new web3.eth.Contract(value.ABI);
   const accounts = await web3.eth.getAccounts();
   const mainAccount = accounts[DEFAULT_ACCOUNT];
-  console.log(
-    '🚀 ~ file: contract.ts ~ line 57 ~ createContract ~ mainAccount',
-    mainAccount,
-  );
   const initialContract = await contract
     .deploy({ data: value.bytecode })
     .send({ from: mainAccount, gas: MAX_GAS })
     .on('receipt', (receipt) => {
-      console.log('Contract Address:', receipt.contractAddress);
+      contractAddress = receipt.contractAddress;
     });
-  await initialContract.methods.message().call((err, data) => {
-    console.log(
-      '🚀 ~ file: contract.ts ~ line 66 ~ initialContract.methods.message ~ data',
-      data,
-    );
-    res = data.toString();
-  });
-  return res;
+  await initialContract.methods
+    .setHash(_signedDocument, _originalDocument)
+    .call((err, data) => {
+      console.log(
+        '🚀 ~ file: contract.ts ~ line 66 ~ initialContract.methods.message ~ data',
+        data,
+      );
+      res = data.toString();
+    });
+  return contractAddress;
 };
+export const setHash = async (contractAddress: string) => {
+  const rpcConectUrl = process.env.RPC_CONNECT_URL;
+  const web3 = new Web3(new Web3.providers.HttpProvider(rpcConectUrl));
+  const contract = new web3.eth.Contract(value.ABI);
+  await initialContract.methods
+    .setHash(_signedDocument, _originalDocument)
+    .call((err, data) => {
+      console.log(
+        '🚀 ~ file: contract.ts ~ line 66 ~ initialContract.methods.message ~ data',
+        data,
+      );
+      res = data.toString();
+    });
+};
+
