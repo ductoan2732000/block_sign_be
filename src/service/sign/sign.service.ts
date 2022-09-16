@@ -10,6 +10,7 @@ import {
   compileContract,
   createContract,
   createInput,
+  SmartContract,
 } from '@/constants/utils/contract';
 import { FileSign } from '@/model/dto/sign.dto';
 import {
@@ -31,11 +32,17 @@ export class SignService extends BaseService {
     super();
   }
   getSign = async (): Promise<any> => {
-    // const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
-    // const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
-    // const resCompile = compileContract(input, name.fullFileName, name.fileName);
-    // const res: any = await createContract(resCompile);
-    return 'res';
+    const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
+    const smartContract = new SmartContract(
+      PATH_FILE_CONTRACT.SIGN,
+      name.fullFileName,
+      name.fileName,
+    );
+    await smartContract.createInput();
+    await smartContract.compileContract();
+    await smartContract.createContract();
+    await smartContract.setHash('tranductoan', 'tranduchugn');
+    return smartContract.contractAddress;
   };
   postSign = async (sha256File: string, value: FileSign) => {
     /**
