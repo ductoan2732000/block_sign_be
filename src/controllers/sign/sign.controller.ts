@@ -12,9 +12,9 @@ export class SignController extends BaseController {
     super();
   }
 
-  @Get()
-  async getSign() {
-    const res = await this.signService.getSign();
+  @Get(':sha256')
+  async getInfor(@Param('sha256') sha256File: string) {
+    const res: any = await this.signService.getSign(sha256File);
     return res;
   }
 

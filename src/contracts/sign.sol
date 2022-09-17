@@ -8,12 +8,8 @@ contract sign
     string private sha256SignedDocument = "";
     string private sha256OriginalDocument = "";
     address private creatorAddress;
-    Visitor[] private listVisitor;
 
-    struct Visitor {
-        address guessAddress;
-        string purpose;
-    }
+    
   
     function setHash(string memory _signedDocument, string memory _originalDocument) public 
     {
@@ -27,32 +23,24 @@ contract sign
             sha256OriginalDocument = _originalDocument;
         }
     }
-    function getOriginalDocument() public returns (string memory){
-        listVisitor.push(Visitor(msg.sender, "getOriginalDocument"));
+    function getOriginalDocument() public view returns (string memory){
         return sha256OriginalDocument;
         
     }
-    function getSignedDocument() public returns (string memory){
-        listVisitor.push(Visitor(msg.sender, "getSignedDocument"));
+    function getSignedDocument() public view returns (string memory){
         return sha256SignedDocument;
         
     }
-    function getCreatorAddress() public returns (address){
-        listVisitor.push(Visitor(msg.sender, "getCreatorAddress"));
+    function getCreatorAddress() public view returns (address){
         return creatorAddress;
     }
-    function checkDocument(string memory _signedDocument, string memory _originalDocument) public returns (bool){
-        listVisitor.push(Visitor(msg.sender, "checkDocument"));
+    function checkDocument(string memory _signedDocument, string memory _originalDocument) public view returns (bool){
         if(keccak256(abi.encodePacked((sha256SignedDocument))) == keccak256(abi.encodePacked(_signedDocument)) && keccak256(abi.encodePacked((sha256OriginalDocument))) == keccak256(abi.encodePacked(_originalDocument))) {
             return true;
         }
         else {
             return false;
         }
-    }
-    function getListVisitor() public returns (Visitor[] memory){
-        listVisitor.push(Visitor(msg.sender, "getListVisitor"));
-        return listVisitor;
     }
 
 }
