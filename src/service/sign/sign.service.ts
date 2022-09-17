@@ -6,12 +6,7 @@ import {
   attachFileSignToDocument,
   getFileNameFromDirectoryPath,
 } from '@/constants/utils';
-import {
-  compileContract,
-  createContract,
-  createInput,
-  SmartContract,
-} from '@/constants/utils/contract';
+import { SmartContract } from '@/constants/utils/contract';
 import { FileSign } from '@/model/dto/sign.dto';
 import {
   getURLDownload,
@@ -31,18 +26,23 @@ export class SignService extends BaseService {
   constructor() {
     super();
   }
-  getSign = async (): Promise<any> => {
+  getSign = async (sha256File: string) => {
     const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
     const smartContract = new SmartContract(
       PATH_FILE_CONTRACT.SIGN,
       name.fullFileName,
       name.fileName,
+      '0xB055ABc6785d4c7494D92d50fe41D38F42dBb7a8',
     );
     await smartContract.createInput();
     await smartContract.compileContract();
-    await smartContract.createContract();
-    await smartContract.setHash('tranductoan', 'tranduchugn');
-    return smartContract.contractAddress;
+    // await smartContract.createContract();
+    // const res = await smartContract.setHash('toan', 'hung');
+    await smartContract.getContractFromAddress(
+      '0xF53587Af4249BAB8B001A8303BAFdc946DDB734F',
+    );
+    const res = await smartContract.checkDocument('toan', 'hung');
+    return res;
   };
   postSign = async (sha256File: string, value: FileSign) => {
     /**
@@ -60,6 +60,7 @@ export class SignService extends BaseService {
         item,
       ),
     );
+    // upload list file signs to storage
     const resUpload = await uploadMultipleFileToStorage(
       listFile,
       listPath,
@@ -103,6 +104,22 @@ export class SignService extends BaseService {
       pathDocumentAfterSign,
       this.store,
     );
+    // create smart contract with sha256 of file signed and original file
+    const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
+    const smartContract = new SmartContract(
+      PATH_FILE_CONTRACT.SIGN,
+      name.fullFileName,
+      name.fileName,
+      '0xB055ABc6785d4c7494D92d50fe41D38F42dBb7a8',
+    );
+    await smartContract.createInput();
+    await smartContract.compileContract();
+    await smartContract.createContract();
+    const transactionHash = await smartContract.setHash(
+      sha256(fileAfterSign),
+      sha256File,
+    );
+    // get url of file signed
     const responseDocumentPath: string = responseUploadSigned.full_path;
     const urlResponseDocument = await getURLDownload(
       this.store,
@@ -112,17 +129,10 @@ export class SignService extends BaseService {
       ...responseUploadSigned,
       url: urlResponseDocument,
       sha256_original_file: sha256File,
+      contract_address: smartContract.contractAddress,
+      transaction_hash: transactionHash,
     };
 
-    // TODO
-    const name = getFileNameFromDirectoryPath(PATH_FILE_CONTRACT.SIGN);
-    const input = createInput(PATH_FILE_CONTRACT.SIGN, name.fullFileName);
-    const resCompile = compileContract(input, name.fullFileName, name.fileName);
-    const smartContractAddress: string = await createContract(
-      resCompile,
-      sha256(fileAfterSign),
-      sha256File,
-    );
     // save to database
     const listSha256 = listFile.map((item) => sha256(item.buffer));
     const pathToDatabase = listSha256.map((item) => {
@@ -142,6 +152,6 @@ export class SignService extends BaseService {
       document: documentUpload,
     };
 
-    return smartContractAddress;
+    return res;
   };
 }

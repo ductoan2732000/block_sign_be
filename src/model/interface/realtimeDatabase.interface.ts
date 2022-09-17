@@ -6,6 +6,8 @@ export interface DocumentUpload extends ResponseUpload {
 export interface DocumentAfterSignUpload extends ResponseUpload {
   url: string;
   sha256_original_file: string;
+  contract_address: string;
+  transaction_hash: string;
 }
 export interface FileSignUpload extends DocumentUpload {
   width: number;

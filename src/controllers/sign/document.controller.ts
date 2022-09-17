@@ -12,9 +12,11 @@ export class DocumentController extends BaseController {
     super();
   }
 
-  @Get()
-  getSign(): any {
-    return 'this.signService.getSign();';
+  @Post('info')
+  @FormDataRequest()
+  async getInforDocument(@Body() document: PostDocument) {
+    const res = await this.documentService.getInfor(document);
+    return res;
   }
 
   @Post()

@@ -20,3 +20,9 @@ export interface ResponseCompile {
   ABI: any;
   bytecode: string;
 }
+
+export interface InteracOption {
+  from?: string;
+  gasPrice?: string;
+  gas?: number;
+}
