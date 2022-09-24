@@ -110,7 +110,7 @@ export class SignService extends BaseService {
       PATH_FILE_CONTRACT.SIGN,
       name.fullFileName,
       name.fileName,
-      '0xB055ABc6785d4c7494D92d50fe41D38F42dBb7a8',
+      '0x8561c06F03817Ee3cbA4DCE4b850E0A2Dc233860',
     );
     await smartContract.createInput();
     await smartContract.compileContract();

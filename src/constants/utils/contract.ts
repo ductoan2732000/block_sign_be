@@ -83,6 +83,10 @@ export class SmartContract {
     const rpcConectUrl = process.env.RPC_CONNECT_URL;
     const web3 = new Web3(new Web3.providers.HttpProvider(rpcConectUrl));
     const contract = new web3.eth.Contract(value.ABI);
+
+    // await web3.eth.accounts.wallet.add(
+    //   'd0b183ad73e8d8269cca2e27b7c1d43173478100eaec2842b4e97e216180e1f7',
+    // );
     const initialContract = await contract
       .deploy({ data: value.bytecode })
       .send(this.optionInterac)
