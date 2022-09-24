@@ -22,7 +22,7 @@ export interface ResponseCompile {
 }
 
 export interface InteracOption {
-  from?: string;
+  from: string;
   gasPrice?: string;
   gas?: number;
 }

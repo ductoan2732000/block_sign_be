@@ -35,7 +35,7 @@ export class DocumentService extends BaseService {
         PATH_FILE_CONTRACT.SIGN,
         name.fullFileName,
         name.fileName,
-        '0xB4BabcF84dE8eD8b9B7271B510CC6d7F252178Bf',
+        '0x8561c06F03817Ee3cbA4DCE4b850E0A2Dc233860',
       );
       await smartContract.createInput();
       await smartContract.compileContract();
@@ -45,8 +45,8 @@ export class DocumentService extends BaseService {
       const creatorAddress = await smartContract.getCreatorAddress();
       //get validate from smart contract
       const validate = await smartContract.checkDocument(
-        data.sha256_original_file,
         sha256File,
+        data.sha256_original_file,
       );
       return {
         ...data,
