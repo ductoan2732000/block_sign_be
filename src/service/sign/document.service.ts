@@ -19,7 +19,7 @@ export class DocumentService extends BaseService {
   }
   getInfor = async (value: PostDocument) => {
     // get data from db
-    const sha256File = sha256(value.document.buffer);
+    const sha256File = sha256(value.file.buffer);
     const pathDocument = END_POINT_DATABASE.SIGNED_FILE.replace(
       '{{sha256}}',
       sha256File,
@@ -59,8 +59,8 @@ export class DocumentService extends BaseService {
   postDocument = async (value: PostDocument) => {
     // upload file into storage
     const responseUpload = await uploadFileToStorage(
-      value.document.buffer,
-      (value.document as any).originalName,
+      value.file.buffer,
+      (value.file as any).originalName,
       END_POINT_STORE.ORIGINAL_FILE,
       this.store,
     );
@@ -71,7 +71,7 @@ export class DocumentService extends BaseService {
     };
 
     // upload into database
-    const sha256File = sha256(value.document.buffer);
+    const sha256File = sha256(value.file.buffer);
     const pathToDatabase = END_POINT_DATABASE.ORIGINAL_FILE.replace(
       '{{sha256}}',
       sha256File,
