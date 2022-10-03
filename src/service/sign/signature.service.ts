@@ -1,4 +1,4 @@
-import { getDatabase, ref, onValue, get} from "firebase/database";
+import { getDatabase, ref, onValue, get, remove} from "firebase/database";
 import { Signature } from './../../model/dto/signature.dto';
 import { Injectable } from '@nestjs/common';
 import { END_POINT_DATABASE, END_POINT_STORE } from '@/constants/endPoint';
@@ -6,6 +6,7 @@ import { BaseService } from '../base.service';
 import {
   getURLDownload,
   uploadFileToStorage,
+  generateUUID
 } from '@/constants/utils/storage';
 import {
   DocumentUpload,
@@ -33,7 +34,7 @@ export class SignatureService extends BaseService {
     };
 
     // upload into database
-    const sha256File = sha256(signature.signature.buffer);
+    const sha256File = generateUUID();
     const pathToDatabase = END_POINT_DATABASE.SIGNATURE.replace(
       '{{sha256}}',
       sha256File,
@@ -48,5 +49,12 @@ export class SignatureService extends BaseService {
     const signatures = ref(db, 'signature');
     const snapshot = await get(signatures);
     return snapshot.val();
+  }
+
+  async deleteSignature(id: string){
+    const db = getDatabase();
+    const signatures = ref(db, `signature/${id}`);
+    const snapshot = await remove(signatures);
+    return true;
   }
 }

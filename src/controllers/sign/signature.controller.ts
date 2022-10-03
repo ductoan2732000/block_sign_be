@@ -1,5 +1,5 @@
 import { Signature } from './../../model/dto/signature.dto';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { END_POINT, VERSION } from '../../constants/route';
 import { BaseController } from '../base.controller';
 import { SignatureService } from '@/service/sign/signature.service';
@@ -20,5 +20,10 @@ export class SignatureController extends BaseController {
   @Get()
   async getAll(){
     return await this.signatureService.getAllSignature()
+  }
+
+  @Delete(":id")
+  async deleteSignature(@Param("id") id: string){
+    return await this.signatureService.deleteSignature(id)
   }
 }
