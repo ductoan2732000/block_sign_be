@@ -7,8 +7,19 @@ import { DocumentController } from './controllers/sign/document.controller';
 import { SignService } from './service/sign/sign.service';
 import { DocumentService } from './service/sign/document.service';
 import { SignatureController } from './controllers/sign/signature.controller';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 @Module({
-  imports: [NestjsFormDataModule, ConfigModule.forRoot()],
+  imports: [
+    NestjsFormDataModule,
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot("mongodb+srv://thanh125:thanh125@cluster0.kpev8g5.mongodb.net/?retryWrites=true&w=majority"),
+    UserModule,
+    AuthModule,
+    MailModule,
+  ],
   controllers: [SignController, DocumentController, SignatureController],
   providers: [SignService, DocumentService, SignatureService],
 })
