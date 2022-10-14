@@ -1,4 +1,4 @@
-import { User, UserDocument } from '@/model/user.model';
+import { User, UserDocument } from '@/user/model/user.model';
 import {
   BadRequestException,
   ConflictException,
@@ -21,11 +21,11 @@ export class UserService {
     }
     dataUser.password = await bcrypt.hash(dataUser.password, 10);
     const newUser = new this.UserModel(dataUser);
-    const userData = await newUser.save();
+    const {password,...userData} =JSON.parse(JSON.stringify( await newUser.save()))
     return userData;
   }
   async getUserById(id: string) {
-    const findUser = await this.UserModel.findOne({ _id: id });
+    const {password,...findUser} = await this.UserModel.findOne({ _id: id }).lean();
     if (!findUser) {
       throw new BadRequestException("This user doesn't exist");
     }
@@ -58,7 +58,7 @@ export class UserService {
 
   async getUserByUserName(userName:string)
   {
-    return this.UserModel.findOne({userName})
+    return this.UserModel.findOne({userName}).lean();
   }
   async findUser(options={}){
     return this.UserModel.find(options)

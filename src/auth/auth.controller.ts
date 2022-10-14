@@ -19,11 +19,11 @@ export class AuthController {
   register(@Body() data : UserRegisterDto){
     return this.userService.registerUser(data)
   }
-  @Post("forgotPassword")
+  @Post("forgot-password")
   forgotPass(@Body() bodyForgotpass : ForgotPasswordDto){
     return this.authService.forgotPass(bodyForgotpass)
   }
-  @Post("resetPassword")
+  @Post("reset-password")
   resetPass(@Body("newPassword") newpass,@Body("token") token:string){
     return this.authService.resetPass(newpass,token);
   }

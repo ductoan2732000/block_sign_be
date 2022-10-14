@@ -13,7 +13,8 @@ import { LocalStrategy } from './local.stragy';
     secret:"123"
   }),MailerModule],
   providers: [AuthService,JwtStrategy,LocalStrategy,MailService],
-  controllers:[AuthController]
+  controllers:[AuthController],
+  exports:[AuthService,AuthModule]
   
 })
 export class AuthModule {}

@@ -11,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
+import { DocumentModule } from './document/document.module';
 @Module({
   imports: [
     NestjsFormDataModule,
@@ -19,6 +20,7 @@ import { MailModule } from './mail/mail.module';
     UserModule,
     AuthModule,
     MailModule,
+    DocumentModule,
   ],
   controllers: [SignController, DocumentController, SignatureController],
   providers: [SignService, DocumentService, SignatureService],

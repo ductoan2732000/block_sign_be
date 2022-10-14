@@ -1,5 +1,5 @@
 import { UserController } from "@/user/user.controller";
-import { User, UserSchema } from "@/model/user.model";
+import { User, UserSchema } from "@/user/model/user.model";
 import { UserService } from "@/user/user.service";
 import { Module } from "@nestjs/common";
 import { MongooseModule } from '@nestjs/mongoose';

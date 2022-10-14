@@ -17,10 +17,4 @@ export class UserController{
   updateUser(@Query("id") id,@Body() dataUpdate:UserRegisterDto){
    return this.userService.updateUser(dataUpdate,id);
   }
-
-  @Get("test")
-  @UseGuards(AuthGuard("jwt"))
-  getUser(){
-   return "ok"
-  }
 }

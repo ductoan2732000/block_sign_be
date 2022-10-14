@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable,HttpException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { MailService } from './../mail/mail.service';
@@ -19,9 +19,13 @@ export class AuthService {
     return null;
   }
   async login(user: any) {
-    const payload = { username: user.userName};
+    const userByName= await this.usersService.getUserByUserName(user.userName)
+    if(!userByName)throw new BadRequestException("Not find user");
+    const {password,...dataUser} = userByName;
+    const payload = { username: user.userName,id:dataUser._id};
     return {
-        access_token: this.jwtService.sign(payload),
+        token: this.jwtService.sign(payload),
+        user:dataUser
     };
 }
 async forgotPass (data:ForgotPasswordDto){
@@ -35,4 +39,19 @@ async resetPass(newPass:string,token:string){
   }
 return this.usersService.updateUser({password:newPass},checkUser[0]._id);
 }
+ async validateToken(bearToken: string): Promise<any>  {
+  if(bearToken.indexOf("Bearer") >=0){
+    const arrayToken = bearToken.split(" ");
+    if(arrayToken.length !==2){
+      throw new BadRequestException("invalid token");
+    }
+    bearToken = arrayToken[1];
+  }
+  try {
+      const verifiedToken = await this.jwtService.verify(bearToken);
+      return verifiedToken;
+  } catch (error) {
+         throw new BadRequestException(error.message);
+  }
+}  
 }
