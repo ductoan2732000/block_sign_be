@@ -11,9 +11,7 @@ import { DocumentController } from './document.controller';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports:[MongooseModule.forFeature([{name:DocumentModel.name,schema:DocumentSchema}]),JwtModule.register({
-    secret:"123"
-  }),AuthModule,UserModule],
+  imports:[MongooseModule.forFeature([{name:DocumentModel.name,schema:DocumentSchema}]),JwtModule,AuthModule,UserModule],
   providers: [DocumentService,MailService],
   controllers: [DocumentController]
 })

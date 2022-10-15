@@ -18,9 +18,7 @@ import { MailService } from './mail.service';
     defaults: {
       from: '"No Reply" <noreply@example.com>',
     },
-  }),UserModule,JwtModule.register({
-    secret:"123"
-  })],
+  }),UserModule,JwtModule],
   providers: [MailService],
   exports:[MailService,MailModule]
 })

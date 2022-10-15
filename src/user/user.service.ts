@@ -21,7 +21,7 @@ export class UserService {
     }
     dataUser.password = await bcrypt.hash(dataUser.password, 10);
     const newUser = new this.UserModel(dataUser);
-    const {password,...userData} =JSON.parse(JSON.stringify( await newUser.save()))
+    const {password,refreshToken,...userData} =JSON.parse(JSON.stringify( await newUser.save()))
     return userData;
   }
   async getUserById(id: string) {

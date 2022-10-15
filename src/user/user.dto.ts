@@ -3,6 +3,7 @@ export class UserRegisterDto{
   password:string;
   email:string;
   displayName:string;
+  refreshToken?:string;
 }
 
 export class UserUpdateDto{
@@ -10,4 +11,9 @@ export class UserUpdateDto{
   password?:string;
   email?:string;
   displayName?:string;
+  refreshToken?:string;
+}
+export class UserLoginDto{
+  userName:string;
+  password:string;
 }

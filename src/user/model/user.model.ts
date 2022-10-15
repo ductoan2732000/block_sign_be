@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 const validateEmail = (email) => {
-  var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return re.test(email);
 }
 export type UserDocument = User & Document
@@ -22,5 +22,9 @@ export class User {
     validate: [validateEmail, 'Please fill a valid email address'],
   })
   email: string;
+
+  @Prop({ type: 'string',default:"" })
+  refreshToken: string;
+
 }
 export const UserSchema = SchemaFactory.createForClass(User);
