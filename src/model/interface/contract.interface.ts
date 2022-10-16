@@ -9,6 +9,9 @@ export enum StateTransaction {
   VIEW = 'view',
   NONPAYABLE = 'nonpayable',
 }
+export enum TypeContract {
+  SIGN = 1,
+}
 export interface ABI {
   inputs: any[];
   name: string;

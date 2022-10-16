@@ -5,5 +5,6 @@ export const VERSION = {
 export const END_POINT = {
   SIGN: 'sign',
   DOCUMENT: 'document',
-  SIGNATURE: 'signature'
+  SIGNATURE: 'signature',
+  CONTRACT: 'contract',
 };
