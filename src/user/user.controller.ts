@@ -1,5 +1,5 @@
 import { AuthGuard } from '@nestjs/passport';
-import { Body, Controller, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query, UseGuards} from "@nestjs/common";
 import { UserRegisterDto } from './user.dto';
 import { UserService } from './user.service';
 @Controller("user")
@@ -17,10 +17,11 @@ export class UserController{
   updateUser(@Query("id") id,@Body() dataUpdate:UserRegisterDto){
    return this.userService.updateUser(dataUpdate,id);
   }
-
+  
+  
   @Get("test")
   @UseGuards(AuthGuard("jwt"))
-  getUser(){
-   return "ok"
+  getTest(){
+   return "ok";
   }
 }

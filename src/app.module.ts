@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
+import { DocumentModule } from './document/document.module';
 import { ContractService } from './service/contract/contract.service';
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ContractService } from './service/contract/contract.service';
     UserModule,
     AuthModule,
     MailModule,
+    DocumentModule,
   ],
   controllers: [
     SignController,
