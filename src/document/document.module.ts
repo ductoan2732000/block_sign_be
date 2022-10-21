@@ -9,10 +9,19 @@ import { Module } from '@nestjs/common';
 import { DocumentService } from './document.service';
 import { DocumentController } from './document.controller';
 import { JwtModule } from '@nestjs/jwt';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
-  imports:[MongooseModule.forFeature([{name:DocumentModel.name,schema:DocumentSchema}]),JwtModule,AuthModule,UserModule],
-  providers: [DocumentService,MailService],
-  controllers: [DocumentController]
+  imports: [
+    MongooseModule.forFeature([
+      { name: DocumentModel.name, schema: DocumentSchema },
+    ]),
+    JwtModule,
+    AuthModule,
+    UserModule,
+    NestjsFormDataModule,
+  ],
+  providers: [DocumentService, MailService],
+  controllers: [DocumentController],
 })
 export class DocumentModule {}

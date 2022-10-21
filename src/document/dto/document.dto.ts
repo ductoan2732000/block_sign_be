@@ -1,14 +1,10 @@
-export class DocumentCreateDto{
-  name: string;
-  objectOriginalId: string;
-  objectSignedId: string
-  status: string;
-  userId:string
+export class DocumentCreateDto {
+  file: Express.Multer.File;
 }
-export class DocumentUpdateDto{
+export class DocumentUpdateDto {
   name?: string;
   objectOriginalId?: string;
-  objectSignedId?: string
+  objectSignedId?: string;
   status?: string;
-  userId?:string
+  userId?: string;
 }
