@@ -8,8 +8,9 @@ export const uploadFileToStorage = async (
   storeFirebase: store.FirebaseStorage,
 ): Promise<ResponseUpload | any> => {
   const arrayBufferFile = file;
+  const sha256File = sha256(arrayBufferFile);
   const path = pathInStore
-    .replace('{{sha256}}', generateUUID())
+    .replace('{{sha256}}', sha256File)
     .replace('{{fileName}}', nameFile);
   const storageRef = store.ref(storeFirebase, path);
   try {

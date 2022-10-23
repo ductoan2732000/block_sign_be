@@ -11,10 +11,15 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.stragy';
 import { authConfig } from '@/config/auth.config';
 @Module({
-  imports:[UserModule,PassportModule,JwtModule,MailerModule],
-  providers: [AuthService,JwtStrategy,LocalStrategy,MailService,RefreshTokenStrategy],
-  controllers:[AuthController],
-  exports:[AuthService,AuthModule]
-  
+  imports: [UserModule, PassportModule, JwtModule, MailerModule],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    LocalStrategy,
+    MailService,
+    RefreshTokenStrategy,
+  ],
+  controllers: [AuthController],
+  exports: [AuthService, AuthModule],
 })
 export class AuthModule {}

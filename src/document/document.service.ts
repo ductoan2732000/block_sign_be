@@ -33,9 +33,14 @@ export class DocumentService extends BaseService {
       is_original: true,
       sha256_original_file: sha256(value.file.buffer),
       status: 'In-Progress',
-      userId: '634b6088000ed4aacb3db026',
+      user_id: '634b6088000ed4aacb3db026',
     };
     const newDocument = await new this.documentModel(data).save();
+    if (!newDocument) throw new BadRequestException();
+    return newDocument;
+  }
+  async createDocumentSigned(value: any) {
+    const newDocument = await new this.documentModel(value).save();
     if (!newDocument) throw new BadRequestException();
     return newDocument;
   }
@@ -48,8 +53,8 @@ export class DocumentService extends BaseService {
     if (!documentCheck) {
       throw new BadRequestException();
     }
-    const { userId } = documentCheck;
-    if (userId !== idUserUpdate) {
+    const { user_id } = documentCheck;
+    if (user_id !== idUserUpdate) {
       throw new BadRequestException('Not permission');
     }
     const updateDocument = await this.documentModel.findOneAndUpdate(
@@ -84,5 +89,8 @@ export class DocumentService extends BaseService {
       response[item] = count;
     });
     return response;
+  }
+  async getDocumentByOriginalSha256(sha256File: string) {
+    return this.documentModel.findOne({ sha256_original_file: sha256File });
   }
 }

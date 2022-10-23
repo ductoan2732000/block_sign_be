@@ -13,6 +13,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { DocumentModule } from './document/document.module';
+import { SignModule } from './sign/sign.module';
 import { ContractService } from './service/contract/contract.service';
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ContractService } from './service/contract/contract.service';
     AuthModule,
     MailModule,
     DocumentModule,
+    SignModule,
   ],
   controllers: [
     SignController,

@@ -39,6 +39,6 @@ export class DocumentModel {
   status: string;
 
   @Prop({ type: 'string' })
-  userId: string;
+  user_id: string;
 }
 export const DocumentSchema = SchemaFactory.createForClass(DocumentModel);
