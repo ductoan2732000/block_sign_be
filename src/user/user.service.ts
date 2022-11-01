@@ -63,4 +63,9 @@ export class UserService {
   async findUser(options={}){
     return this.UserModel.find(options)
   }
+  // async getInfoUser(){
+  //   const tokenBear = req.headers.authorization;
+  //   const decodedToken = await this.authService.validateToken(tokenBear);
+  //   return ""
+  // }
 }

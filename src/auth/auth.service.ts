@@ -65,6 +65,7 @@ export class AuthService {
     );
   }
   async validateToken(bearToken: string): Promise<any> {
+    if(!bearToken)throw new BadRequestException('invalid token');
     if (bearToken.indexOf('Bearer') >= 0) {
       const arrayToken = bearToken.split(' ');
       if (arrayToken.length !== 2) {
@@ -73,7 +74,7 @@ export class AuthService {
       bearToken = arrayToken[1];
     }
     try {
-      const verifiedToken = await this.jwtService.verify(bearToken);
+      const verifiedToken = await this.jwtService.verify(bearToken,{secret:authConfig.secretkey});
       return verifiedToken;
     } catch (error) {
       throw new BadRequestException(error.message);
