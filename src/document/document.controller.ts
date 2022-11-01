@@ -45,8 +45,8 @@ export class DocumentController extends BaseController {
     return this.documentService.getDocumentById(id);
   }
   @Get('get-by-status')
-  async getDocumentByStatus(@Query('status') status: string) {
-    return this.documentService.getDocumentByStatus(status);
+  async getDocumentByStatus(@Query('status') status: string ,@Query('page') page: number ,@Query('limit') limit: number ,@Query('name_doc') name:string) {
+    return this.documentService.getDocumentByStatus(status,page,limit,name);
   }
   @Get('count-document-by-status')
   async countDocumentByStatus() {
