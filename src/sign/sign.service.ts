@@ -26,7 +26,7 @@ export class SignService extends BaseService {
   ) {
     super();
   }
-  async postSign(sha256File: string, value: FileSignDto) {
+  async postSign(sha256File: string, value: FileSignDto, idUser: string) {
     const listFile = value.signs.map((item) => item.signature);
     const listFileName: string[] = value.signs.map(
       (item) => (item.signature as any).originalName,
@@ -56,7 +56,7 @@ export class SignService extends BaseService {
         x: value.signs[index].x,
         y: value.signs[index].y,
         number_page: value.signs[index].number_page,
-        user_id: '634b6088000ed4aacb3db026',
+        user_id: idUser,
         sha256_original_file: sha256File,
         priority: value.signs[index].priority,
         type: value.signs[index].type,

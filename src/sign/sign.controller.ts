@@ -28,8 +28,18 @@ export class SignController extends BaseController {
   @Post(':sha256')
   @ApiBody({ description: 'body:any someMethod' })
   @FormDataRequest()
-  async sign(@Param('sha256') sha256File: string, @Body() signs: FileSignDto) {
-    const res = await this.signService.postSign(sha256File, signs);
+  async sign(
+    @Request() req,
+    @Param('sha256') sha256File: string,
+    @Body() signs: FileSignDto,
+  ) {
+    const tokenBear = req.headers.authorization;
+    const decodedToken = await this.authService.validateToken(tokenBear);
+    const res = await this.signService.postSign(
+      sha256File,
+      signs,
+      decodedToken.id,
+    );
     return res;
   }
 }

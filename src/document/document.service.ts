@@ -12,11 +12,12 @@ import { DocumentModel, DocumentType } from './model/document.model';
 @Injectable()
 export class DocumentService extends BaseService {
   constructor(
-    @InjectModel(DocumentModel.name) private documentModel: Model<DocumentType>,private userService:UserService
+    @InjectModel(DocumentModel.name) private documentModel: Model<DocumentType>,
+    private userService: UserService,
   ) {
     super();
   }
-  async createDocument(value: DocumentCreateDto) {
+  async createDocument(value: DocumentCreateDto, id: string) {
     // upload file into storage
     const responseUpload = await uploadFileToStorage(
       value.file.buffer,
@@ -34,7 +35,7 @@ export class DocumentService extends BaseService {
       is_original: true,
       sha256_original_file: sha256(value.file.buffer),
       status: 'In-Progress',
-      user_id: '634b6088000ed4aacb3db026',
+      user_id: id,
     };
     const newDocument = await new this.documentModel(data).save();
     if (!newDocument) throw new BadRequestException();
@@ -66,43 +67,52 @@ export class DocumentService extends BaseService {
     return updateDocument;
   }
   async getDocumentById(id: string) {
-    
     const documentDetail = await this.documentModel.findOne({ _id: id });
     if (!documentDetail) {
       throw new BadRequestException('document does not exist');
     }
     return documentDetail;
   }
-  async getDocumentByStatus(status: string,page:number,limit:number,name:string) {
+  async getDocumentByStatus(
+    status: string,
+    page: number,
+    limit: number,
+    name: string,
+  ) {
     let params = {} as any;
-    if(status){
-      params.status = status
+    if (status) {
+      params.status = status;
     }
-    if(name){
-      params.name = name
+    if (name) {
+      params.name = name;
     }
     let limitNum = Number(limit);
     let pageNum = Number(page);
-    if(!limit || !Number.isInteger(limitNum)){
-     limitNum = 15
+    if (!limit || !Number.isInteger(limitNum)) {
+      limitNum = 15;
     }
-    if(!page || !Number.isInteger(pageNum)){
-      pageNum = 1
+    if (!page || !Number.isInteger(pageNum)) {
+      pageNum = 1;
     }
-      let listDocumentByStatus = await this.documentModel.find(params).skip((pageNum-1)*limitNum).limit(limitNum).lean() as any;
-      const total_item = await this.documentModel.find(params).countDocuments();
-      const total_page = Math.ceil(total_item/limitNum)
-      if (!listDocumentByStatus) {
-        throw new BadRequestException('document does not exist');
-      }
-      for(let i = 0;i <listDocumentByStatus.length;i++){
-        const {user_id} = listDocumentByStatus[i];
-        const {createdAt,updatedAt,refreshToken,...user} = await this.userService.getUserById(user_id) as any;
-        listDocumentByStatus[i].user = user;
-        delete listDocumentByStatus[i].user_id;
-      }
-      return {data:listDocumentByStatus,total_item,total_page};
-}
+    let listDocumentByStatus = (await this.documentModel
+      .find(params)
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum)
+      .lean()) as any;
+    const total_item = await this.documentModel.find(params).countDocuments();
+    const total_page = Math.ceil(total_item / limitNum);
+    if (!listDocumentByStatus) {
+      throw new BadRequestException('document does not exist');
+    }
+    for (let i = 0; i < listDocumentByStatus.length; i++) {
+      const { user_id } = listDocumentByStatus[i];
+      const { createdAt, updatedAt, refreshToken, ...user } =
+        (await this.userService.getUserById(user_id)) as any;
+      listDocumentByStatus[i].user = user;
+      delete listDocumentByStatus[i].user_id;
+    }
+    return { data: listDocumentByStatus, total_item, total_page };
+  }
   async countDocumentByStatus() {
     const listDocument = await this.documentModel.find({});
     const response = {};

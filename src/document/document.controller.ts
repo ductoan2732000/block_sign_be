@@ -23,10 +23,13 @@ export class DocumentController extends BaseController {
   }
   @Post('create')
   @FormDataRequest()
-  createDocument(@Body() data: DocumentCreateDto) {
-    return this.documentService.createDocument(data);
+  async createDocument(@Request() req, @Body() data: DocumentCreateDto) {
+    const tokenBear = req.headers.authorization;
+    const decodedToken = await this.authService.validateToken(tokenBear);
+    return this.documentService.createDocument(data, decodedToken.id);
   }
   @Put('update')
+  @FormDataRequest()
   async updateDocument(
     @Request() req,
     @Body() dataUpdate: DocumentUpdateDto,
@@ -45,8 +48,13 @@ export class DocumentController extends BaseController {
     return this.documentService.getDocumentById(id);
   }
   @Get('get-by-status')
-  async getDocumentByStatus(@Query('status') status: string ,@Query('page') page: number ,@Query('limit') limit: number ,@Query('name_doc') name:string) {
-    return this.documentService.getDocumentByStatus(status,page,limit,name);
+  async getDocumentByStatus(
+    @Query('status') status: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Query('name_doc') name: string,
+  ) {
+    return this.documentService.getDocumentByStatus(status, page, limit, name);
   }
   @Get('count-document-by-status')
   async countDocumentByStatus() {

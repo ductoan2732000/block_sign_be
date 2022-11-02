@@ -3,8 +3,6 @@ export class DocumentCreateDto {
 }
 export class DocumentUpdateDto {
   name?: string;
-  objectOriginalId?: string;
-  objectSignedId?: string;
   status?: string;
-  userId?: string;
+  user_id?: string;
 }
