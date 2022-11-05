@@ -71,4 +71,12 @@ export class DocumentController extends BaseController {
     const decodedToken = await this.authService.validateToken(tokenBear);
     return this.documentService.countDocumentByStatus(decodedToken.id);
   }
+
+  @Post('detail')
+  @FormDataRequest()
+  async detailDocument(@Request() req, @Body() data: DocumentCreateDto) {
+    // const tokenBear = req.headers.authorization;
+    // const decodedToken = await this.authService.validateToken(tokenBear);
+    return this.documentService.detailDocument(data);
+  }
 }

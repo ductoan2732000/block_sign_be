@@ -132,4 +132,17 @@ export class DocumentService extends BaseService {
   async getDocumentByOriginalSha256(sha256File: string) {
     return this.documentModel.findOne({ sha256_original_file: sha256File });
   }
+  async detailDocument(value: DocumentCreateDto) {
+    const arrayBufferFile = value.file.buffer;
+    const sha256File = sha256(arrayBufferFile);
+    const param = {
+      is_original: false,
+      sha256_file: sha256File,
+    };
+    const documentDetail = await this.documentModel.findOne(param);
+    if (!documentDetail) {
+      throw new BadRequestException();
+    }
+    return documentDetail;
+  }
 }
