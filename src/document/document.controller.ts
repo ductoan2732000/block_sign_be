@@ -49,15 +49,26 @@ export class DocumentController extends BaseController {
   }
   @Get('get-by-status')
   async getDocumentByStatus(
+    @Request() req,
     @Query('status') status: string,
     @Query('page') page: number,
     @Query('limit') limit: number,
     @Query('name_doc') name: string,
   ) {
-    return this.documentService.getDocumentByStatus(status, page, limit, name);
+    const tokenBear = req.headers.authorization;
+    const decodedToken = await this.authService.validateToken(tokenBear);
+    return this.documentService.getDocumentByStatus(
+      status,
+      page,
+      limit,
+      name,
+      decodedToken.id,
+    );
   }
   @Get('count-document-by-status')
-  async countDocumentByStatus() {
-    return this.documentService.countDocumentByStatus();
+  async countDocumentByStatus(@Request() req) {
+    const tokenBear = req.headers.authorization;
+    const decodedToken = await this.authService.validateToken(tokenBear);
+    return this.documentService.countDocumentByStatus(decodedToken.id);
   }
 }

@@ -8,7 +8,7 @@ import { sha256 } from 'js-sha256';
 import { Model } from 'mongoose';
 import { DocumentCreateDto, DocumentUpdateDto } from './dto/document.dto';
 import { DocumentModel, DocumentType } from './model/document.model';
-
+const ObjectId = require('mongodb').ObjectId;
 @Injectable()
 export class DocumentService extends BaseService {
   constructor(
@@ -78,6 +78,7 @@ export class DocumentService extends BaseService {
     page: number,
     limit: number,
     name: string,
+    id: string,
   ) {
     let params = {} as any;
     if (status) {
@@ -86,6 +87,7 @@ export class DocumentService extends BaseService {
     if (name) {
       params.name = name;
     }
+    params.user_id = id;
     let limitNum = Number(limit);
     let pageNum = Number(page);
     if (!limit || !Number.isInteger(limitNum)) {
@@ -113,13 +115,15 @@ export class DocumentService extends BaseService {
     }
     return { data: listDocumentByStatus, total_item, total_page };
   }
-  async countDocumentByStatus() {
-    const listDocument = await this.documentModel.find({});
+  async countDocumentByStatus(id: string) {
+    const listDocument = await this.documentModel.find({
+      user_id: id,
+    });
     const response = {};
     if (!listDocument) {
       throw new BadRequestException();
     }
-    ['Completed', 'Draft', 'Void', 'In-Progress'].forEach((item) => {
+    ['Completed', 'Void', 'In-Progress'].forEach((item) => {
       const count = listDocument.filter((doc) => doc.status === item).length;
       response[item] = count;
     });
