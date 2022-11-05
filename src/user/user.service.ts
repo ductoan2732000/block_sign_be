@@ -21,11 +21,15 @@ export class UserService {
     }
     dataUser.password = await bcrypt.hash(dataUser.password, 10);
     const newUser = new this.UserModel(dataUser);
-    const {password,refreshToken,...userData} =JSON.parse(JSON.stringify( await newUser.save()))
+    const { password, refreshToken, ...userData } = JSON.parse(
+      JSON.stringify(await newUser.save()),
+    );
     return userData;
   }
   async getUserById(id: string) {
-    const {password,...findUser} = await this.UserModel.findOne({ _id: id }).lean();
+    const { password, ...findUser } = await this.UserModel.findOne({
+      _id: id,
+    }).lean();
     if (!findUser) {
       throw new BadRequestException("This user doesn't exist");
     }
@@ -56,12 +60,11 @@ export class UserService {
     return user;
   }
 
-  async getUserByUserName(userName:string)
-  {
-    return this.UserModel.findOne({userName}).lean();
+  async getUserByUserName(userName: string) {
+    return this.UserModel.findOne({ userName }).lean();
   }
-  async findUser(options={}){
-    return this.UserModel.find(options)
+  async findUser(options = {}) {
+    return this.UserModel.find(options);
   }
   // async getInfoUser(){
   //   const tokenBear = req.headers.authorization;

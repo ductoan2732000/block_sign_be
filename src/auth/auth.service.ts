@@ -39,7 +39,11 @@ export class AuthService {
     );
     if (!passwordMatches)
       throw new BadRequestException('Password is incorrect');
-    const tokens = await this.getTokens(dataUser._id, dataUser.userName);
+    const tokens = await this.getTokens(
+      dataUser._id,
+      dataUser.userName,
+      dataUser.addressWallet,
+    );
     await this.updateRefreshToken(dataUser._id, tokens.refreshToken);
     return {
       token: tokens.accessToken,
@@ -65,7 +69,7 @@ export class AuthService {
     );
   }
   async validateToken(bearToken: string): Promise<any> {
-    if(!bearToken)throw new BadRequestException('invalid token');
+    if (!bearToken) throw new BadRequestException('invalid token');
     if (bearToken.indexOf('Bearer') >= 0) {
       const arrayToken = bearToken.split(' ');
       if (arrayToken.length !== 2) {
@@ -74,7 +78,9 @@ export class AuthService {
       bearToken = arrayToken[1];
     }
     try {
-      const verifiedToken = await this.jwtService.verify(bearToken,{secret:authConfig.secretkey});
+      const verifiedToken = await this.jwtService.verify(bearToken, {
+        secret: authConfig.secretkey,
+      });
       return verifiedToken;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -93,11 +99,12 @@ export class AuthService {
     return argon2.hash(data);
   }
 
-  async getTokens(userId: string, username: string) {
+  async getTokens(userId: string, username: string, addressWallet: string) {
     const accessToken = await this.jwtService.signAsync(
       {
         id: userId,
         username,
+        addressWallet,
       },
       {
         secret: authConfig.secretkey,
@@ -108,6 +115,7 @@ export class AuthService {
       {
         id: userId,
         username,
+        addressWallet,
       },
       {
         secret: authConfig.refreshKey,
@@ -129,9 +137,13 @@ export class AuthService {
       user.refreshToken,
       refreshToken,
     );
-    
+
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
-    const tokens = await this.getTokens(user._id, user.userName);
+    const tokens = await this.getTokens(
+      user._id,
+      user.userName,
+      user.addressWallet,
+    );
     await this.updateRefreshToken(user._id, tokens.refreshToken);
     return tokens;
   }

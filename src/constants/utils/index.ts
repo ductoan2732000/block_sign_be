@@ -24,10 +24,6 @@ export const attachFileSignToDocument = async (
     const signImage = await pdfDoc.embedPng(item.signature.buffer);
     const numberPage = item.number_page;
     const currentPage = pdfDoc.getPages()[numberPage - 1];
-    console.log(
-      '🚀 ~ file: index.ts ~ line 27 ~ awaitfile.forEach ~ currentPage',
-      currentPage.getSize().height - parseFloat(`${item.y}`),
-    );
     await currentPage.drawImage(signImage, {
       x: parseFloat(`${item.x}`),
       y: currentPage.getSize().height - parseFloat(`${item.y}`) - item.height,
