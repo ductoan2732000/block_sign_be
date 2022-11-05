@@ -106,7 +106,7 @@ export class SignService extends BaseService {
       sha256_original_file: sha256File,
       sha256_file: sha256(fileAfterSign),
       status: 'Completed',
-      user_id: '634b6088000ed4aacb3db026',
+      user_id: idUser,
     };
     // upload file signed to db mongoose
     const response =
