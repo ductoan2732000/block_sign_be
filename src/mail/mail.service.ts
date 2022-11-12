@@ -1,3 +1,4 @@
+import { authConfig } from './../config/auth.config';
 import { ForgotPasswordDto } from './../auth/dto/ForgotPassword.dto';
 import { UserService } from './../user/user.service';
 import { Injectable, BadRequestException } from '@nestjs/common';
@@ -13,16 +14,18 @@ export class MailService {
       if(userCheck.length === 0) {
         throw new BadRequestException("wrong username or email");
       }
-      const token = this.jwtService.sign(data);
+      const token = this.jwtService.sign(data,{secret:authConfig.secretkey});
       const url = `http://localhost:8083/resetpassword/${token}`;
   
       await this.mailerService.sendMail({
-        to:"19020630@vnu.edu.vn",
-        from: "thanhthanh125521@gmail.com",
+        to:email,
+        from: "19020630@vnu.edu.vn",
         subject: 'Reset password',
         html:`<a href=${url}><button>Click To Reset</button></a>`
       });
+      return "da gui mail"
     }
+    
     
   }
 

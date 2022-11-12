@@ -17,13 +17,11 @@ export class UserController{
       const {id} = decodedToken
    return this.userService.getUserById(id);
   }
-  // @Get()
-  // getUserbyId(@Query("id") id:string){
-  //   return this.userService.getUserById(id);
-  // }
-  @Put()
-  updateUser(@Query("id") id,@Body() dataUpdate:UserRegisterDto){
-   return this.userService.updateUser(dataUpdate,id);
+  @Put("update")
+  async updateUser(@Request() req, @Body() dataUpdate:UserRegisterDto){
+    const tokenBear = req.headers.authorization;
+    const decodedToken = await this.authService.validateToken(tokenBear);  
+   return this.userService.updateUser(dataUpdate,decodedToken.id);
   }
   
   
