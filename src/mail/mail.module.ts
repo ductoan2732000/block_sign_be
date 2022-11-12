@@ -1,8 +1,7 @@
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { UserModule } from './../user/user.module';
-import { UserService } from './../user/user.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from './../user/user.module';
 import { MailService } from './mail.service';
 
 @Module({
@@ -12,7 +11,7 @@ import { MailService } from './mail.service';
       secure: false,
       auth: {
         user: 'apikey',
-        pass: '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',
+        pass: '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',
       },
     },
     defaults: {

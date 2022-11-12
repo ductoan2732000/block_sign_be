@@ -36,13 +36,7 @@ export class UserService {
     return findUser;
   }
   async updateUser(dataUpdate: UserUpdateDto, id: string) {
-    const userCheck = await this.UserModel.find({
-      userName: dataUpdate.userName,
-      _id: { $ne: id },
-    });
-    if (userCheck.length > 0) {
-      throw new ConflictException('Username already exists');
-    }
+    const currentUser = await this.getUserById(id);
     if (dataUpdate.password) {
       dataUpdate.password = await bcrypt.hash(dataUpdate.password, 10);
     }
