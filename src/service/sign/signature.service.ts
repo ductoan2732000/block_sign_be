@@ -1,4 +1,4 @@
-import { getDatabase, ref, onValue, get, remove} from "firebase/database";
+import { getDatabase, ref, onValue, get, remove } from 'firebase/database';
 import { Signature } from './../../model/dto/signature.dto';
 import { Injectable } from '@nestjs/common';
 import { END_POINT_DATABASE, END_POINT_STORE } from '@/constants/endPoint';
@@ -6,11 +6,9 @@ import { BaseService } from '../base.service';
 import {
   getURLDownload,
   uploadFileToStorage,
-  generateUUID
+  generateUUID,
 } from '@/constants/utils/storage';
-import {
-  DocumentUpload,
-} from '@/model/interface/realtimeDatabase.interface';
+import { DocumentUpload } from '@/model/interface/realtimeDatabase.interface';
 import { postToDatabase } from '@/constants/utils/database';
 import { sha256 } from 'js-sha256';
 @Injectable()
@@ -18,8 +16,8 @@ export class SignatureService extends BaseService {
   constructor() {
     super();
   }
-  
-  createSignature = async (signature: Signature) => {
+
+  createSignature = async (signature: Signature, userId: string) => {
     // upload file into storage
     const responseUpload = await uploadFileToStorage(
       signature.signature.buffer,
@@ -31,6 +29,7 @@ export class SignatureService extends BaseService {
     const fileUpload: DocumentUpload = {
       ...responseUpload,
       url: url,
+      user_id: userId,
     };
 
     // upload into database
@@ -44,14 +43,26 @@ export class SignatureService extends BaseService {
     return fileUpload;
   };
 
-  async getAllSignature(){
+  async getAllSignature(userId: string) {
     const db = getDatabase();
     const signatures = ref(db, 'signature');
     const snapshot = await get(signatures);
-    return snapshot.val();
+    const allSignature = snapshot.val();
+    if (allSignature) {
+      const keys = Object.keys(allSignature);
+      const listByUser = [];
+      keys.forEach((item) => {
+        const value = allSignature[item];
+        if (value.user_id && value.user_id === userId) {
+          listByUser.push(value);
+        }
+      });
+      return listByUser;
+    }
+    return [];
   }
 
-  async deleteSignature(id: string){
+  async deleteSignature(id: string) {
     const db = getDatabase();
     const signatures = ref(db, `signature/${id}`);
     const snapshot = await remove(signatures);

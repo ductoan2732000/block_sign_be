@@ -2,6 +2,7 @@ import { ResponseUpload } from './storage.interface';
 
 export interface DocumentUpload extends ResponseUpload {
   url: string;
+  user_id: string;
 }
 export interface DocumentAfterSignUpload extends ResponseUpload {
   url: string;
