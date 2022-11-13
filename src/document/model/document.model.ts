@@ -29,6 +29,9 @@ export class DocumentModel {
   @Prop({ type: 'string' })
   transaction_hash: string;
 
+  @Prop({ type: 'string' })
+  smart_contract_address: string;
+
   @Prop({ type: 'boolean', required: true })
   is_original: boolean;
 
@@ -39,8 +42,7 @@ export class DocumentModel {
   })
   status: string;
 
-  @Prop({ type: 'string'})
+  @Prop({ type: 'string' })
   user_id: string;
- 
 }
 export const DocumentSchema = SchemaFactory.createForClass(DocumentModel);

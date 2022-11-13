@@ -77,7 +77,6 @@ export class SignService extends BaseService {
     }
 
     // handle sign file
-    console.log('handle sign file');
     const fileAfterSign = await attachFileSignToDocument(
       fileExist.url,
       value.signs,
@@ -106,6 +105,7 @@ export class SignService extends BaseService {
       is_original: false,
       sha256_original_file: sha256File,
       sha256_file: sha256(fileAfterSign),
+      smart_contract_address: '',
       status: 'Completed',
       user_id: idUser,
     };
