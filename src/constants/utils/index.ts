@@ -25,10 +25,13 @@ export const attachFileSignToDocument = async (
     const numberPage = item.number_page;
     const currentPage = pdfDoc.getPages()[numberPage - 1];
     await currentPage.drawImage(signImage, {
-      x: parseFloat(`${item.x}`),
-      y: currentPage.getSize().height - parseFloat(`${item.y}`) - item.height,
-      width: parseFloat(`${item.width}`),
-      height: parseFloat(`${item.height}`),
+      x: parseFloat(`${(item.x * 3) / 4}`),
+      y:
+        currentPage.getSize().height -
+        parseFloat(`${(item.y * 3) / 4}`) -
+        (item.height * 3) / 4,
+      width: parseFloat(`${(item.width * 3) / 4}`),
+      height: parseFloat(`${(item.height * 3) / 4}`),
     });
   });
 

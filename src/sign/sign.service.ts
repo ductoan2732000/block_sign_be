@@ -77,6 +77,7 @@ export class SignService extends BaseService {
     }
 
     // handle sign file
+    console.log('handle sign file');
     const fileAfterSign = await attachFileSignToDocument(
       fileExist.url,
       value.signs,
